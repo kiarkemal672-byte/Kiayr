@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-version="1.0.0">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>الدُّرَّةُ الذَّهَبِيَّة | إدارة الحَلَقات والقِراءات</title>
+<meta name="description" content="تطبيق إدارة حلقات القراءات: حضور وغياب، تأخير، كتاب، دور قراءة المتن والمطالعة مع تتبع الدَّين، اختبارات PDF، وتقارير الوالدين — بثلاث لغات." />
+<meta name="theme-color" content="#0a0d18" />
+<meta name="color-scheme" content="dark" />
+
+<!-- ═══════════════ PWA (التثبيت كتطبيق) ═══════════════ -->
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" type="image/svg+xml" href="icon.svg" />
+<link rel="apple-touch-icon" href="icon.svg" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="الدرّة الذهبية" />
+
+<!-- ═══════════════ الخطوط (عربية: أميري و رقعة | أمهرية: نوتو إثيوبي | إنجليزية: أنيقة) ═══════════════ -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Marcellus&family=Noto+Sans+Ethiopic:wght@400;600;700&family=Noto+Serif+Ethiopic:wght@400;600;700&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+<!-- ═══════════════ تعريفات التدرّج الذهبي المشتركة لكل أيقونات SVG ═══════════════ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0"   stop-color="#f6e27a"/>
+      <stop offset=".5"  stop-color="#d4af37"/>
+      <stop offset="1"   stop-color="#8f6f1d"/>
+    </linearGradient>
+    <linearGradient id="goldGradSoft" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0"  stop-color="#f3d98b"/>
+      <stop offset="1"  stop-color="#b9932e"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- ═══════════════ شاشة البداية (Splash) ═══════════════ -->
+<div id="splash" class="splash" role="status">
+  <div class="splash-frame">
+    <div class="splash-star">
+      <svg viewBox="0 0 120 120" width="110" height="110">
+        <path fill="url(#goldGrad)" d="M60 6 L69 51 L114 60 L69 69 L60 114 L51 69 L6 60 L51 51 Z" opacity=".95"/>
+        <path fill="url(#goldGradSoft)" d="M60 26 L94 60 L60 94 L26 60 Z" opacity=".5"/>
+        <path fill="none" stroke="url(#goldGrad)" stroke-width="2" d="M60 18 L78 60 L60 102 L42 60 Z" opacity=".8"/>
+      </svg>
+    </div>
+    <h1 class="splash-title">الدُّرَّةُ الذَّهَبِيَّة</h1>
+    <p class="splash-sub" id="splashSub">نُظُمُ الحَلَقاتِ والقِراءاتِ بِإتقان</p>
+    <div class="splash-dots"><i></i><i></i><i></i></div>
+  </div>
+</div>
+
+<!-- ═══════════════ هيكل التطبيق ═══════════════ -->
+<div id="app" class="app" hidden>
+
+  <!-- الشريط العلوي: الهوية + اللغة + حالة المزامنة + زر التثبيت -->
+  <header class="topbar">
+    <div class="topbar-inner">
+
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" width="40" height="40">
+            <path fill="url(#goldGrad)" d="M32 4 L38 18 L52 24 L38 30 L32 44 L26 30 L12 24 L26 18 Z" opacity=".95"/>
+            <path fill="url(#goldGradSoft)" d="M32 12 L44 24 L32 36 L20 24 Z" opacity=".55"/>
+            <path fill="url(#goldGrad)" d="M8 46 C16 41 24 41 32 46 C40 41 48 41 56 46 L56 57 C48 52 40 52 32 57 C24 52 16 52 8 57 Z"/>
+          </svg>
+        </span>
+        <div class="brand-txt">
+          <div class="brand-title" id="brandTitle">الدُّرَّةُ الذَّهَبِيَّة</div>
+          <div class="brand-sub" id="brandSub"></div>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <span id="syncDot" class="sync-dot" data-status="off" title=""></span>
+        <select id="langSelect" class="lang-select" aria-label="Language / اللغة / ቋንቋ">
+          <option value="ar">العربية</option>
+          <option value="en">English</option>
+          <option value="am">አማርኛ</option>
+        </select>
+        <button id="btnInstall" class="btn btn-icon" hidden title="تثبيت التطبيق">⤓</button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- شريط القراءات/الدروس (زيادة قراءة جديدة من الأعلى ➕) — يُبنى ديناميكياً -->
+  <nav id="readingTabs" class="reading-tabs" aria-label="القراءات والدروس"></nav>
+
+  <!-- التنقل الرئيسي — يُبنى ديناميكياً -->
+  <nav id="mainNav" class="mainnav" aria-label="القائمة الرئيسية"></nav>
+
+  <!-- منطقة العرض (كل الشاشات تُرسم هنا) -->
+  <main id="view" class="view" role="main"></main>
+
+  <footer id="foot" class="foot"></footer>
+</div>
+
+<!-- ═══════════════ الجذور: النوافذ المنبثقة + التنبيهات + مسرح PDF ═══════════════ -->
+<div id="modalRoot"></div>
+<div id="toastRoot" class="toast-root" aria-live="polite"></div>
+
+<!-- مسرح توليد PDF (مخفي خارج الشاشة — مقاس A4 بالضبط 794×1123px) -->
+<div id="pdfStage" class="pdf-stage" aria-hidden="true"></div>
+
+<noscript>
+  <div style="padding:2rem;text-align:center;font-family:serif;color:#d4af37;background:#0a0d18">
+    هذا التطبيق يتطلب تفعيل JavaScript في المتصفح.
+  </div>
+</noscript>
+
+<!-- ═══════════════ المكتبات (يُخزنها عامل الخدمة للعمل دون اتصال) ═══════════════ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<!-- ═══════════════ ملفات التطبيق (الترتيب مهم) ═══════════════ -->
+<script src="js/i18n.js"></script>   <!-- اللغات الثلاث -->
+<script src="js/core.js"></script>   <!-- القاعدة + محرك الدور والدين + السحابة -->
+<script src="js/ui.js"></script>     <!-- الواجهات -->
+<script src="js/pdf.js"></script>    <!-- مولد PDF -->
+<script src="js/report.js"></script> <!-- تقارير الوالدين والمشاركة -->
+<script src="js/app.js"></script>    <!-- الإقلاع والتوجيه و PWA -->
+
+</body>
+</html>
