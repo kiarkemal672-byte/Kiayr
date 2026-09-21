@@ -1,0 +1,19 @@
+{
+  "name": "الدُّرَّةُ الذَّهَبِيَّة — إدارة الحَلَقَات والقِراءات",
+  "short_name": "الدرّة الذهبية",
+  "description": "حضور وغياب وتأخير وكتاب، دور قراءة المتن والمطالعة بتتبع الدَّين، اختبارات PDF متكاملة الصفحات، وتقارير الوالدين — بثلاث لغات.",
+  "id": "durra-gold",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "dir": "rtl",
+  "lang": "ar",
+  "theme_color": "#0a0d18",
+  "background_color": "#070a12",
+  "categories": ["education", "productivity"],
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
